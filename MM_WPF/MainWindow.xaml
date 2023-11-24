@@ -3,9 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:components="clr-namespace:MM_WPF.Components"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="450"
-        Loaded="MainWindow_OnLoaded">
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition
@@ -23,22 +24,41 @@
             Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition
-                    Height="*"/>
+                    Height="Auto"/>
+                <RowDefinition
+                    Height="Auto"/>
+                <RowDefinition
+                    Height="Auto"/>
                 <RowDefinition
                     Height="Auto"/>
             </Grid.RowDefinitions>
-            <DataGrid
-                x:Name="MainDataGrid"
-                ItemsSource="{Binding Items}"
-                ColumnWidth="*"
-                HorizontalContentAlignment="Stretch"
-                HorizontalAlignment="Stretch"
-                AutoGenerateColumns="False"
-                CanUserAddRows="True"
-                CanUserDeleteRows="True">
-            </DataGrid>
-            <StackPanel
+            <components:CustomTable
+                Grid.Row="0"
+                Columns="4"
+                Rows="2"
+                x:Name="FactoriesTable"
+                Header="Заводы">
+                
+            </components:CustomTable>
+            <components:CustomTable
                 Grid.Row="1"
+                Columns="3"
+                Rows="2"
+                x:Name="StoresTable"
+                Header="Магазины">
+                
+            </components:CustomTable>
+            <components:CustomTable
+                Grid.Row="2"
+                Columns="3"
+                Rows="3"
+                x:Name="MainTable"
+                Header="Заводы/Магазины"
+                Items="{Binding Items, Mode=TwoWay}">
+                
+            </components:CustomTable>
+            <StackPanel
+                Grid.Row="3"
                 Orientation="Horizontal">
                 <Button
                     Click="ButtonBase_OnClick">
