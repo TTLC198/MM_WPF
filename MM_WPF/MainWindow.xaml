@@ -6,7 +6,8 @@
         xmlns:components="clr-namespace:MM_WPF.Components"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="450"
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        Loaded="MainWindow_OnLoaded">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition
@@ -31,34 +32,76 @@
                     Height="Auto"/>
                 <RowDefinition
                     Height="Auto"/>
+                <RowDefinition
+                    Height="Auto"/>
             </Grid.RowDefinitions>
-            <components:CustomTable
+            
+            <DataGrid
                 Grid.Row="0"
-                Columns="4"
-                Rows="2"
-                x:Name="FactoriesTable"
-                Header="Заводы">
-                
-            </components:CustomTable>
-            <components:CustomTable
+                x:Name="SuppliesTable"
+                DataContext="{Binding .}"
+                ItemsSource="{Binding SuppliesItems, Mode=TwoWay}"
+                HorizontalContentAlignment="Stretch"
+                HorizontalAlignment="Stretch"
+                ColumnWidth="*"
+                AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn 
+                        Binding="{Binding Path=., Mode=TwoWay}"
+                        Foreground="Black" 
+                        Header="Предложение" 
+                        IsReadOnly="false" />
+                </DataGrid.Columns>
+            </DataGrid>
+            
+            <DataGrid
                 Grid.Row="1"
-                Columns="3"
-                Rows="2"
-                x:Name="StoresTable"
-                Header="Магазины">
-                
-            </components:CustomTable>
+                x:Name="DemandsTable"
+                DataContext="{Binding .}"
+                ItemsSource="{Binding DemandsItems, Mode=TwoWay}"
+                HorizontalContentAlignment="Stretch"
+                HorizontalAlignment="Stretch"
+                ColumnWidth="*"
+                AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn 
+                        Binding="{Binding Path=., Mode=TwoWay}"
+                        Foreground="Black" 
+                        Header="Спрос" 
+                        IsReadOnly="false" />
+                </DataGrid.Columns>
+            </DataGrid>
+            
             <components:CustomTable
                 Grid.Row="2"
-                Columns="3"
-                Rows="3"
+                Columns="2"
+                Rows="2"
                 x:Name="MainTable"
-                Header="Заводы/Магазины"
-                Items="{Binding Items, Mode=TwoWay}">
+                Items="{Binding Items, Mode=TwoWay}"
+                Header="Предложение/Спрос">
                 
             </components:CustomTable>
+            
+            <Grid
+                Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="*"/>
+                    <ColumnDefinition
+                        Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button
+                    Grid.Column="0"
+                    Click="AddCell"
+                    Content="Добавить строку"/>
+                <Button
+                    Grid.Column="1"
+                    Click="AddColumn"
+                    Content="Добавить колонку"/>
+            </Grid>
+            
             <StackPanel
-                Grid.Row="3"
+                Grid.Row="4"
                 Orientation="Horizontal">
                 <Button
                     Click="ButtonBase_OnClick">

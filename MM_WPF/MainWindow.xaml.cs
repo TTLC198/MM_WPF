@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -15,28 +16,55 @@ namespace MM_WPF
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        public ObservableCollection<TableItem> Items
+        public ObservableCollection<string> SuppliesItems
         {
-            get => _items;
+            get => _suppliesItems;
             set
             {
-                _items = Items;
+                _suppliesItems = value;
                 OnPropertyChanged();
             }
         }
 
-        private ObservableCollection<TableItem> _items = new ObservableCollection<TableItem>();
+        private ObservableCollection<string> _suppliesItems;
+        
+        public ObservableCollection<string> DemandsItems
+        {
+            get => _demandsItems;
+            set
+            {
+                _demandsItems = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ObservableCollection<string> _demandsItems;
+        
+        public ObservableCollection<List<string>> Items
+        {
+            get => _items;
+            set
+            {
+                _items = value;
+                OnPropertyChanged();
+            }
+        }
+        
+        private ObservableCollection<List<string>> _items = new ObservableCollection<List<string>>();
         
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = this;
+            DataContext = this;
         }
+        
         
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            var temp = MainTable.GetValues();
-            var t = temp;
+            var values = MainTable.GetValues();
+            var t = SuppliesItems.GetValues();
+            var tt = DemandsItems.GetValues();
+            //var solver = new TransportProblemSolver()
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -52,6 +80,40 @@ namespace MM_WPF
             field = value;
             OnPropertyChanged(propertyName);
             return true;
+        }
+
+        private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
+        {
+
+            var sItems = new List<string>();
+            for (int i = 0; i < 2; i++)
+            {
+                sItems.Add("");
+            }
+            
+            var dItems = new List<string>();
+            for (int i = 0; i < 2; i++)
+            {
+                dItems.Add("");
+            }
+                
+            SuppliesItems = new ObservableCollection<string>(sItems);
+            DemandsItems = new ObservableCollection<string>(dItems);
+
+            SuppliesTable.ItemsSource = SuppliesItems;
+            DemandsTable.ItemsSource = DemandsItems;
+        }
+        
+        public void AddColumn(object sender, RoutedEventArgs e)
+        {
+            MainTable.AddColumn(sender, e);
+            DemandsItems.Add("");
+        }
+    
+        public void AddCell(object sender, RoutedEventArgs e)
+        {
+            MainTable.AddCell(sender, e);
+            SuppliesItems.Add("");
         }
     }
 }
