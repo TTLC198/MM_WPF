@@ -16,7 +16,7 @@ namespace MM_WPF
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        public ObservableCollection<string> SuppliesItems
+        public ObservableCollection<TableItem> SuppliesItems
         {
             get => _suppliesItems;
             set
@@ -26,9 +26,9 @@ namespace MM_WPF
             }
         }
 
-        private ObservableCollection<string> _suppliesItems;
+        private ObservableCollection<TableItem> _suppliesItems;
         
-        public ObservableCollection<string> DemandsItems
+        public ObservableCollection<TableItem> DemandsItems
         {
             get => _demandsItems;
             set
@@ -38,9 +38,9 @@ namespace MM_WPF
             }
         }
 
-        private ObservableCollection<string> _demandsItems;
+        private ObservableCollection<TableItem> _demandsItems;
         
-        public ObservableCollection<List<string>> Items
+        public ObservableCollection<List<TableItem>> Items
         {
             get => _items;
             set
@@ -50,7 +50,7 @@ namespace MM_WPF
             }
         }
         
-        private ObservableCollection<List<string>> _items = new ObservableCollection<List<string>>();
+        private ObservableCollection<List<TableItem>> _items = new ObservableCollection<List<TableItem>>();
         
         public MainWindow()
         {
@@ -61,10 +61,11 @@ namespace MM_WPF
         
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            var values = MainTable.GetValues();
-            var t = SuppliesItems.GetValues();
-            var tt = DemandsItems.GetValues();
-            //var solver = new TransportProblemSolver()
+            var mainValues = MainTable.GetValues();
+            var suppliesValues = SuppliesItems.Select(s => s.Value ?? string.Empty).GetValues();
+            var demandsValues = DemandsItems.Select(s => s.Value ?? string.Empty).GetValues();
+            var solver = TransportProblemSolver.SolveTransportProblem(suppliesValues.ToArray(), demandsValues.ToArray(), mainValues);
+            var t = solver;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -97,8 +98,14 @@ namespace MM_WPF
                 dItems.Add("");
             }
                 
-            SuppliesItems = new ObservableCollection<string>(sItems);
-            DemandsItems = new ObservableCollection<string>(dItems);
+            SuppliesItems = new ObservableCollection<TableItem>(sItems.Select(s => new TableItem()
+            {
+                Value = s
+            }));
+            DemandsItems = new ObservableCollection<TableItem>(dItems.Select(s => new TableItem()
+            {
+                Value = s
+            }));
 
             SuppliesTable.ItemsSource = SuppliesItems;
             DemandsTable.ItemsSource = DemandsItems;
@@ -107,13 +114,19 @@ namespace MM_WPF
         public void AddColumn(object sender, RoutedEventArgs e)
         {
             MainTable.AddColumn(sender, e);
-            DemandsItems.Add("");
+            DemandsItems.Add(new TableItem()
+            {
+                Value = ""
+            });
         }
     
         public void AddCell(object sender, RoutedEventArgs e)
         {
             MainTable.AddCell(sender, e);
-            SuppliesItems.Add("");
+            SuppliesItems.Add(new TableItem()
+            {
+                Value = ""
+            });
         }
     }
 }

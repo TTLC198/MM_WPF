@@ -13,19 +13,19 @@ namespace MM_WPF.Components;
 
 public partial class CustomTable : UserControl, INotifyPropertyChanged
 {
-    public ObservableCollection<List<string>> Items
+    public ObservableCollection<List<TableItem>> Items
     {
-        get => (ObservableCollection<List<string>>) GetValue(ItemsProperty);
+        get => (ObservableCollection<List<TableItem>>) GetValue(ItemsProperty);
         set => SetValue(ItemsProperty, value);
     }
-    
+
     public static readonly DependencyProperty ItemsProperty =
         DependencyProperty.Register(
             nameof(Items),
-            typeof(ObservableCollection<List<string>>),
+            typeof(ObservableCollection<List<TableItem>>),
             typeof(CustomTable),
-            new PropertyMetadata(new ObservableCollection<List<string>>()));
-    
+            new PropertyMetadata(new ObservableCollection<List<TableItem>>()));
+
     public static readonly DependencyProperty ColumnsProperty =
         DependencyProperty.Register(
             nameof(Columns),
@@ -35,7 +35,7 @@ public partial class CustomTable : UserControl, INotifyPropertyChanged
 
     public int Columns
     {
-        get => (int)GetValue(ColumnsProperty);
+        get => (int) GetValue(ColumnsProperty);
         set => SetValue(ColumnsProperty, value);
     }
 
@@ -48,10 +48,10 @@ public partial class CustomTable : UserControl, INotifyPropertyChanged
 
     public int Rows
     {
-        get => (int)GetValue(RowsProperty);
+        get => (int) GetValue(RowsProperty);
         set => SetValue(RowsProperty, value);
     }
-    
+
     public static readonly DependencyProperty HeaderProperty =
         DependencyProperty.Register(
             nameof(Header),
@@ -61,10 +61,10 @@ public partial class CustomTable : UserControl, INotifyPropertyChanged
 
     public string Header
     {
-        get => (string)GetValue(HeaderProperty);
+        get => (string) GetValue(HeaderProperty);
         set => SetValue(HeaderProperty, value);
     }
-    
+
     public CustomTable()
     {
         InitializeComponent();
@@ -80,8 +80,8 @@ public partial class CustomTable : UserControl, INotifyPropertyChanged
     private void GenerateColumns(int columnsCount)
     {
         MainDataGrid.Columns.Clear();
-        
-        var headerBinding = new Binding("[0]")
+
+        var headerBinding = new Binding("[0].Value")
         {
             Mode = BindingMode.OneTime
         };
@@ -91,10 +91,10 @@ public partial class CustomTable : UserControl, INotifyPropertyChanged
             Binding = headerBinding,
             IsReadOnly = true
         });
-        
+
         for (var i = 1; i < columnsCount + 1; i++)
         {
-            var itemBinding = new Binding($"[{i}]")
+            var itemBinding = new Binding($"[{i}].Value")
             {
                 Mode = BindingMode.TwoWay
             };
@@ -113,11 +113,21 @@ public partial class CustomTable : UserControl, INotifyPropertyChanged
         Items?.Clear();
         for (var i = 0; i < count; i++)
         {
-            var columns = new List<string>() { $"{i + 1}" };
+            var columns = new List<TableItem>()
+            {
+                new TableItem()
+                {
+                    Value = $"{i + 1}"
+                }
+            };
             for (var j = 1; j < columnsCount + 1; j++)
             {
-                columns.Add("");
+                columns.Add(new TableItem()
+                {
+                    Value = $""
+                });
             }
+
             Items?.Add(columns);
         }
     }
@@ -126,20 +136,50 @@ public partial class CustomTable : UserControl, INotifyPropertyChanged
     {
         Columns += 1;
         GenerateColumns(Columns);
+        Items?.Clear();
+        for (var i = 0; i < Rows; i++)
+        {
+            var columns = new List<TableItem>()
+            {
+                new ()
+                {
+                    Value = $"{i + 1}"
+                }
+            };
+            for (var j = 1; j < Columns + 1; j++)
+            {
+                columns.Add(new TableItem()
+                {
+                    Value = $""
+                });
+            }
+
+            Items?.Add(columns);
+        }
     }
-    
+
     public void AddCell(object sender, RoutedEventArgs e)
     {
         Rows += 1;
-        var columns = new List<string>() { $"{Rows}" };
+        var columns = new List<TableItem>()
+        {
+            new TableItem()
+            {
+                Value = $"{Rows}"
+            }
+        };
         for (var j = 1; j < Columns + 1; j++)
         {
-            columns.Add("");
+            columns.Add(new TableItem()
+            {
+                Value = ""
+            });
         }
+
         Items?.Add(columns);
     }
 
-    public IEnumerable<int[]> GetValues()
+    public int[,] GetValues()
     {
         /*var columnsCount = MainDataGrid.Columns.Count;
         var rowsCount = MainDataGrid.Items.Count;
@@ -153,13 +193,27 @@ public partial class CustomTable : UserControl, INotifyPropertyChanged
                     array[i, j] = tableItem.Columns.ElementAtOrDefault(i);
             }
         }*/
-        return Items.Select(a => a
+        var rows = Items.Count;
+        var columns = (Items.FirstOrDefault()?.Count ?? 0) - 1;
+
+        var arrays = new int[rows, columns];
+        for (var i = 0; i < rows; i++)
+        {
+            for (var j = 0; j < columns; j++)
+            {
+                var t = Items[i][j + 1].Value;
+                arrays[i, j] = Convert.ToInt32(string.IsNullOrEmpty(Items[i][j + 1].Value) ? "0" : Items[i][j + 1].Value);
+            }
+        }
+
+        return arrays;
+        /*return Items.Select(a => a
             .Select(i => Convert.ToInt32(
                 string.IsNullOrEmpty(i)
                 ? "0"
                 : i))
             .ToArray()
-        ).ToArray();
+        ).ToArray();*/
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

@@ -39,15 +39,16 @@
             <DataGrid
                 Grid.Row="0"
                 x:Name="SuppliesTable"
-                DataContext="{Binding .}"
-                ItemsSource="{Binding SuppliesItems, Mode=TwoWay}"
+                ItemsSource="{Binding SuppliesItems}"
                 HorizontalContentAlignment="Stretch"
                 HorizontalAlignment="Stretch"
                 ColumnWidth="*"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
                 AutoGenerateColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn 
-                        Binding="{Binding Path=., Mode=TwoWay}"
+                        Binding="{Binding Path=Value}"
                         Foreground="Black" 
                         Header="Предложение" 
                         IsReadOnly="false" />
@@ -57,15 +58,16 @@
             <DataGrid
                 Grid.Row="1"
                 x:Name="DemandsTable"
-                DataContext="{Binding .}"
-                ItemsSource="{Binding DemandsItems, Mode=TwoWay}"
+                ItemsSource="{Binding DemandsItems}"
                 HorizontalContentAlignment="Stretch"
                 HorizontalAlignment="Stretch"
                 ColumnWidth="*"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
                 AutoGenerateColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn 
-                        Binding="{Binding Path=., Mode=TwoWay}"
+                        Binding="{Binding Path=Value}"
                         Foreground="Black" 
                         Header="Спрос" 
                         IsReadOnly="false" />
