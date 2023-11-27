@@ -179,7 +179,7 @@ public partial class CustomTable : UserControl, INotifyPropertyChanged
         Items?.Add(columns);
     }
 
-    public int[,] GetValues()
+    public int[][] GetValues()
     {
         /*var columnsCount = MainDataGrid.Columns.Count;
         var rowsCount = MainDataGrid.Items.Count;
@@ -193,7 +193,7 @@ public partial class CustomTable : UserControl, INotifyPropertyChanged
                     array[i, j] = tableItem.Columns.ElementAtOrDefault(i);
             }
         }*/
-        var rows = Items.Count;
+        /*var rows = Items.Count;
         var columns = (Items.FirstOrDefault()?.Count ?? 0) - 1;
 
         var arrays = new int[rows, columns];
@@ -206,14 +206,14 @@ public partial class CustomTable : UserControl, INotifyPropertyChanged
             }
         }
 
-        return arrays;
-        /*return Items.Select(a => a
+        return arrays;*/
+        return Items.Select(a => a
             .Select(i => Convert.ToInt32(
-                string.IsNullOrEmpty(i)
+                string.IsNullOrEmpty(i.Value)
                 ? "0"
-                : i))
+                : i.Value))
             .ToArray()
-        ).ToArray();*/
+        ).ToArray();
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

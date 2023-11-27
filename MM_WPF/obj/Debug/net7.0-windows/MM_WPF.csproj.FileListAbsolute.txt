@@ -46,3 +46,5 @@ C:\Users\yoreh\RiderProjects\MM_WPF\MM_WPF\obj\Debug\net7.0-windows\refint\MM_WP
 C:\Users\yoreh\RiderProjects\MM_WPF\MM_WPF\obj\Debug\net7.0-windows\MM_WPF.pdb
 C:\Users\yoreh\RiderProjects\MM_WPF\MM_WPF\obj\Debug\net7.0-windows\MM_WPF.genruntimeconfig.cache
 C:\Users\yoreh\RiderProjects\MM_WPF\MM_WPF\obj\Debug\net7.0-windows\ref\MM_WPF.dll
+C:\Users\yoreh\RiderProjects\MM_WPF\MM_WPF\obj\Debug\net7.0-windows\ResultWindow.g.cs
+C:\Users\yoreh\RiderProjects\MM_WPF\MM_WPF\obj\Debug\net7.0-windows\ResultWindow.baml

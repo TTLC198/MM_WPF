@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET7_0;NETCOREAPP
 C:\Users\yoreh\RiderProjects\MM_WPF\MM_WPF\App.xaml
-2-1884163016
+3-1492877688
 
-8673584091
+8603020149
 1981827736222
-Components\CustomTable.xaml;MainWindow.xaml;
+Components\CustomTable.xaml;MainWindow.xaml;ResultWindow.xaml;
 
 False
 

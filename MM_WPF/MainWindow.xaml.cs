@@ -64,8 +64,9 @@ namespace MM_WPF
             var mainValues = MainTable.GetValues();
             var suppliesValues = SuppliesItems.Select(s => s.Value ?? string.Empty).GetValues();
             var demandsValues = DemandsItems.Select(s => s.Value ?? string.Empty).GetValues();
-            var solver = TransportProblemSolver.SolveTransportProblem(suppliesValues.ToArray(), demandsValues.ToArray(), mainValues);
-            var t = solver;
+            var result = TransportProblemSolver.SolveKTZ(suppliesValues.ToArray(), demandsValues.ToArray(), mainValues);
+            var resultWindow = new ResultWindow(result);
+            resultWindow.Show();
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -74,7 +75,7 @@ namespace MM_WPF
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
+    
         protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
         {
             if (EqualityComparer<T>.Default.Equals(field, value)) return false;
