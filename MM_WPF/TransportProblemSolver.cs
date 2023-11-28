@@ -154,7 +154,7 @@ public class TransportProblemSolver
         return resultX;
     }
 
-    public static int[] PotentialSearch(int ACount, int BCount, int[][] c, int[][] x)
+    public static int[] PotentialSearch(int ACount, int BCount, int[][] c, int[][] x, StringBuilder sb)
     {
         int[] V = new int[BCount];
         int[] U = new int[ACount];
@@ -199,23 +199,32 @@ public class TransportProblemSolver
                 break;
             }
         }
+        
+        for (int i = 0; i < U.Length; i++)
+        {
+            U[i] = U[i] <= -999 ? 0 : U[i];
+        }
+        for (int i = 0; i < V.Length; i++)
+        {
+            V[i] = V[i] <= -999 ? 0 : V[i];
+        }
 
         int[] result = new int[ACount + BCount];
-        Console.Write("\nU - ");
+        sb.Append("\nU - ");
         for (int i = 0; i < ACount; i++)
         {
-            Console.Write($"{U[i]}\t");
+            sb.Append($"{U[i]}\t");
             result[i] = U[i];
         }
 
-        Console.Write("\nV - ");
+        sb.Append("\nV - ");
         for (int i = ACount, j = 0; i < BCount + ACount && j < BCount; i++, j++)
         {
-            Console.Write($"{V[j]}\t");
+            sb.Append($"{V[j]}\t");
             result[i] = V[j];
         }
 
-        Console.WriteLine("\n");
+        sb.Append("\n");
 
         return result;
     }
@@ -312,7 +321,7 @@ public class TransportProblemSolver
             sb.Append("\n");
         }
 
-        int[] UV = PotentialSearch(ACount, BCount, c, x);
+        int[] UV = PotentialSearch(ACount, BCount, c, x, sb);
 
         for (int i = 0; i < ACount; i++)
         {
@@ -453,7 +462,7 @@ public class TransportProblemSolver
             sb.Append("\n");
         }
 
-        int[] UV = PotentialSearch(ACount, BCount, cCopy, x);
+        int[] UV = PotentialSearch(ACount, BCount, cCopy, x, sb);
         int[] V = new int[BCount];
         int[] U = new int[ACount];
 
@@ -462,9 +471,21 @@ public class TransportProblemSolver
 
         int isOptimal = 0;
         int[][] d = DeltaSearch(ACount, BCount, U, V, cCopy, ref isOptimal, sb);
-
+        
         while (isOptimal == 0)
         {
+            for (int i = 0; i < U.Length; i++)
+            {
+                U[i] = U[i] <= -999 ? 0 : U[i];
+            }
+            for (int i = 0; i < V.Length; i++)
+            {
+                V[i] = V[i] <= -999 ? 0 : V[i];
+            }
+            for (int i = 0; i < UV.Length; i++)
+            {
+                UV[i] = UV[i] <= -999 ? 0 : UV[i];
+            }
             sb.Append("\nПлан неоптимален. Перестройка...\n");
             d = OptimalSearch(ACount, BCount, U, V, cCopy, x, d, ref isOptimal, sb);
         }
